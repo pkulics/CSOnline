@@ -83,7 +83,7 @@ def xstatic(*tags):
     return [f.startswith('http://') and f or static(f) for f in fs]
 
 
-def vendor(*tags):
+def vendor_back(*tags):
     media = Media()
     for tag in tags:
         file_type = tag.split('.')[-1]
@@ -93,6 +93,19 @@ def vendor(*tags):
         elif file_type == 'css':
             media.add_css({'screen': files})
     return media
+
+
+def vendor(*tags):
+    css = {'screen':[]}
+    js = []
+    for tag in tags:
+        file_type = tag.split('.')[-1]
+        files = xstatic(tag)
+        if file_type == 'js':
+            js.extend(files)
+        elif file_type == 'css':
+            css['screen'] += files
+    return Media(css=css, js=js)
 
 
 def lookup_needs_distinct(opts, lookup_path):
@@ -343,7 +356,7 @@ def display_for_field(value, field):
         return formats.number_format(value, field.decimal_places)
     elif isinstance(field, models.FloatField):
         return formats.number_format(value)
-    elif isinstance(field.rel, models.ManyToManyRel):
+    elif isinstance(field.remote_field, models.ManyToManyRel):
         return ', '.join([smart_text(obj) for obj in value.all()])
     else:
         return smart_text(value)
@@ -482,4 +495,4 @@ def is_related_field(field):
 
 
 def is_related_field2(field):
-    return (hasattr(field, 'rel') and field.rel != None) or is_related_field(field)
+    return (hasattr(field, 'remote_field') and field.remote_field != None) or is_related_field(field)
