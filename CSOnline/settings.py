@@ -45,6 +45,7 @@ INSTALLED_APPS = [
     'operation',
     'xadmin',
     'crispy_forms',
+    'captcha',
 ]
 
 MIDDLEWARE = [
@@ -62,7 +63,7 @@ ROOT_URLCONF = 'CSOnline.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [os.path.join(BASE_DIR, 'templates')],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -84,7 +85,7 @@ WSGI_APPLICATION = 'CSOnline.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'test',
+        'NAME': 'wordpress5',
         'USER':'root',
         'PASSWORD':'',
         'HOST':'localhost',
@@ -134,3 +135,15 @@ STATICFILES_DIRS = (
 # https://docs.djangoproject.com/en/2.0/howto/static-files/
 
 STATIC_URL = '/static/'
+
+AUTHENTICATION_BACKENDS = (
+    'users.views.CustomBackend',
+)
+
+# 邮件设置
+EMAIL_HOST = 'smtp.qq.com' # smtp服务器主机
+EMAIL_PORT = 25 # 端口
+EMAIL_HOST_USER = '877611873@qq.com'    #邮箱地址
+EMAIL_HOST_PASSWORD = "lcghwllsekftbfci"   #密码
+EMAIL_USE_TLS = True
+EMAIL_FROM = "877611873@qq.com"
